@@ -6,6 +6,7 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StringType;
 import org.hibernate.usertype.UserType;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +31,18 @@ public abstract class StringTypeIdentifierJavaType<T extends StringTypeIdentifie
     }
 
     @Override
+    public boolean equals(Object x, Object y) throws HibernateException {
+        if (x == y) return true;
+        if (x == null || y == null) return false;
+        return x.equals(y);
+    }
+
+    @Override
+    public int hashCode(Object x) throws HibernateException {
+        return x != null ? x.hashCode() : 0;
+    }
+
+    @Override
     public T nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         String value = (String) StringType.INSTANCE.nullSafeGet(rs, names, session, owner);
         if (value == null) {
@@ -50,5 +63,31 @@ public abstract class StringTypeIdentifierJavaType<T extends StringTypeIdentifie
             StringType.INSTANCE.nullSafeSet(st, ((StringTypeIdentifier) value).stringValue(), index, session);
         }
     }
+
+    @Override
+    public Object deepCopy(Object value) throws HibernateException {
+        return value;
+    }
+
+    @Override
+    public boolean isMutable() {
+        return false;
+    }
+
+    @Override
+    public Serializable disassemble(Object value) throws HibernateException {
+        return (Serializable) value;
+    }
+
+    @Override
+    public Object assemble(Serializable cached, Object owner) throws HibernateException {
+        return cached;
+    }
+
+    @Override
+    public Object replace(Object original, Object target, Object owner) throws HibernateException {
+        return original;
+    }
+
 
 }
