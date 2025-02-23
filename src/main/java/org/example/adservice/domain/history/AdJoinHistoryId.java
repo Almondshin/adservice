@@ -2,10 +2,11 @@ package org.example.adservice.domain.history;
 
 import org.example.common.domain.StringTypeIdentifier;
 import org.example.common.jpa.hibernate.StringTypeIdentifierJavaType;
-import org.hibernate.annotations.TypeDef;
 
-@TypeDef(name = "adJoinHistoryId", typeClass = AdJoinHistoryId.AdJoinHistoryJavaType.class)
-public class AdJoinHistoryId extends StringTypeIdentifier {
+import java.io.Serializable;
+
+
+public class AdJoinHistoryId extends StringTypeIdentifier implements Serializable {
 
     public static AdJoinHistoryId of(String id) {
         return new AdJoinHistoryId(id);

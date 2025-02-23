@@ -5,12 +5,14 @@ import org.example.adservice.domain.user.User;
 import org.example.common.domain.AggregateRoot;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "AD_JOIN_HISTORY")
+@TypeDef(name = "adJoinHistoryId", typeClass = AdJoinHistoryId.AdJoinHistoryJavaType.class)
 public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryId> {
 
     @Id
@@ -38,6 +40,8 @@ public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryId>
     public AdJoinHistoryId getId() {
         return this.id;
     }
+
+    public AdJoinHistory() {}
 
     public AdJoinHistory(AdJoinHistoryId id, Ad ad, User user, LocalDateTime joinAt, int rewardAmount) {
         this.id = id;

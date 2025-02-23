@@ -2,6 +2,7 @@ package org.example.adservice.domain.user;
 
 import org.example.common.domain.AggregateRoot;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USER_INFO")
+@TypeDef(name = "userId", typeClass = UserId.UserIdJavaType.class)
 public class User extends AggregateRoot<User, UserId> {
 
     @Id
@@ -24,6 +26,8 @@ public class User extends AggregateRoot<User, UserId> {
     public UserId getId() {
         return this.id;
     }
+
+    public User() {}
 
     public User(UserId id, short remainingJoinCount) {
         this.id = id;

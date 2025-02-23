@@ -2,10 +2,10 @@ package org.example.adservice.domain.user;
 
 import org.example.common.domain.StringTypeIdentifier;
 import org.example.common.jpa.hibernate.StringTypeIdentifierJavaType;
-import org.hibernate.annotations.TypeDef;
 
-@TypeDef(name = "userId", typeClass = UserId.UserIdJavaType.class)
-public class UserId extends StringTypeIdentifier {
+import java.io.Serializable;
+
+public class UserId extends StringTypeIdentifier implements Serializable {
 
     public static UserId of(String id) {
         return new UserId(id);
