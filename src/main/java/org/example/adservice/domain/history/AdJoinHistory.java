@@ -9,20 +9,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "AD_JOIN_HISTORY")
-@IdClass(AdJoinHistoryCompositeId.class)
 public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryCompositeId> {
 
-    @Id
-    @Column(name = "USER_ID", nullable = false)
-    private UserId userId;
-
-    @Id
-    @Column(name = "AD_ID", nullable = false)
-    private AdId adId;
-
-    @Id
-    @Column(name = "JOIN_AT", nullable = false)
-    private LocalDateTime joinAt;
+    @EmbeddedId
+    private AdJoinHistoryCompositeId id;
 
     @Column(name = "AD_NAME", nullable = false)
     private String adName;
@@ -30,21 +20,11 @@ public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryCom
     @Column(name = "REWARD_AMOUNT", nullable = false)
     private int rewardAmount;
 
-    @Transient
-    private AdJoinHistoryCompositeId adJoinHistoryCompositeId;
-
     @Override
     public AdJoinHistoryCompositeId getId() {
-        return new AdJoinHistoryCompositeId(userId.stringValue(), adId.stringValue(), joinAt);
+        return new AdJoinHistoryCompositeId(id.getUserId(), id.getAdId(), id.getJoinAt());
     }
 
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public AdId getAdId() {
-        return adId;
-    }
 
     public String getAdName() {
         return adName;
@@ -54,17 +34,11 @@ public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryCom
         return rewardAmount;
     }
 
-    public LocalDateTime getJoinAt() {
-        return joinAt;
-    }
-
     public AdJoinHistory() {
     }
 
     public AdJoinHistory(UserId userId, AdId adId, LocalDateTime joinAt, String adName, int rewardAmount) {
-        this.userId = userId;
-        this.adId = adId;
-        this.joinAt = joinAt;
+        this.id = new AdJoinHistoryCompositeId(userId, adId, joinAt);
         this.adName = adName;
         this.rewardAmount = rewardAmount;
     }

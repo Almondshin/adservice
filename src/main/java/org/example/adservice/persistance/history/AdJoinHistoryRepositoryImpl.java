@@ -19,6 +19,6 @@ public class AdJoinHistoryRepositoryImpl extends BaseRepository<AdJoinHistory, A
 
     @Override
     public Page<AdJoinHistory> findByUserIdAndJoinAt(UserId userId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return repository.findByUserIdAndJoinAtBetween(userId, startDate, endDate, pageable);
+        return repository.findByIdUserIdAndIdJoinAtBetween(userId, startDate, endDate, pageable);
     }
 }

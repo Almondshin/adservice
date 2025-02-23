@@ -35,9 +35,9 @@ public class AdJoinHistoryService {
 
     private AdJoinHistoryResponse toResponse(AdJoinHistory history) {
         return AdJoinHistoryResponse.builder()
-                .userId(history.getUserId().stringValue())
-                .adId(history.getAdId().stringValue())
-                .joinAt(history.getJoinAt())
+                .userId(history.getId().getUserId().stringValue())
+                .adId(history.getId().getAdId().stringValue())
+                .joinAt(history.getId().getJoinAt())
                 .adName(history.getAdName())
                 .rewardAmount(history.getRewardAmount())
                 .build();

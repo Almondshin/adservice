@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 
 interface AdJoinHistoryJpaRepository extends JpaRepository<AdJoinHistory, AdJoinHistoryCompositeId> {
-    Page<AdJoinHistory> findByUserIdAndJoinAtBetween(UserId userId, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    Page<AdJoinHistory> findByIdUserIdAndIdJoinAtBetween(UserId userId, LocalDateTime start, LocalDateTime end, Pageable pageable);
 }

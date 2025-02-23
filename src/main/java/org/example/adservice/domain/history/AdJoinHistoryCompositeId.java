@@ -1,25 +1,34 @@
 package org.example.adservice.domain.history;
 
+import org.example.adservice.domain.ad.AdId;
+import org.example.adservice.domain.user.UserId;
+
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Embeddable
 public class AdJoinHistoryCompositeId implements Serializable {
-    private String userId;
-    private String adId;
+    private UserId userId;
+    private AdId adId;
     private LocalDateTime joinAt;
 
-    public AdJoinHistoryCompositeId(String userId, String adId, LocalDateTime joinAt) {
+    public AdJoinHistoryCompositeId(UserId userId, AdId adId, LocalDateTime joinAt) {
         this.userId = userId;
         this.adId = adId;
         this.joinAt = joinAt;
     }
 
-    public String getUserId() {
+    public AdJoinHistoryCompositeId() {
+
+    }
+
+    public UserId getUserId() {
         return userId;
     }
 
-    public String getAdId() {
+    public AdId getAdId() {
         return adId;
     }
 
