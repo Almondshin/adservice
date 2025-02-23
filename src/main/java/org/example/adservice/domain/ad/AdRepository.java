@@ -3,7 +3,6 @@ package org.example.adservice.domain.ad;
 
 import org.example.common.domain.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AdRepository extends Repository<Ad,AdId> {
