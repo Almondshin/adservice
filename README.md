@@ -13,7 +13,7 @@
 ---
 
 ## 기술 스택
-- Server: Spring Boot, Java 17, Spring Data JPA
+- Server: Spring Boot, Java 11, Spring Data JPA
 - Database: MariaDB (or H2 for local test)
 
 ---
