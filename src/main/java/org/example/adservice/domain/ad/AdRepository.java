@@ -9,8 +9,7 @@ import java.util.List;
 public interface AdRepository extends Repository<Ad,AdId> {
     Ad find(AdId id);
 
-    List<Ad> findTop10();
+    boolean existsByName(String name);
 
-    List<Ad> findActiveAds(LocalDateTime now);
-
+    List<Ad> findAds();
 }
