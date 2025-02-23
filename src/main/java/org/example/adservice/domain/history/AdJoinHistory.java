@@ -1,53 +1,73 @@
 package org.example.adservice.domain.history;
 
-import org.example.adservice.domain.ad.Ad;
-import org.example.adservice.domain.user.User;
+import org.example.adservice.domain.ad.AdId;
+import org.example.adservice.domain.user.UserId;
 import org.example.common.domain.AggregateRoot;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "AD_JOIN_HISTORY")
-@TypeDef(name = "adJoinHistoryId", typeClass = AdJoinHistoryId.AdJoinHistoryJavaType.class)
-public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryId> {
+@IdClass(AdJoinHistoryCompositeId.class)
+public class AdJoinHistory extends AggregateRoot<AdJoinHistory, AdJoinHistoryCompositeId> {
 
     @Id
-    @Type(type = "adJoinHistoryId")
-    @Column(name = "AD_JOIN_HISTORY_ID", nullable = false)
-    private AdJoinHistoryId id;
+    @Column(name = "USER_ID", nullable = false)
+    private UserId userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AD_ID", nullable = false)
-    private Ad ad;
+    @Id
+    @Column(name = "AD_ID", nullable = false)
+    private AdId adId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
-
-    @CreationTimestamp
-    @Column(name = "JOIN_AT", nullable = false, updatable = false)
-    @OrderBy("joinAt ASC")
+    @Id
+    @Column(name = "JOIN_AT", nullable = false)
     private LocalDateTime joinAt;
+
+    @Column(name = "AD_NAME", nullable = false)
+    private String adName;
 
     @Column(name = "REWARD_AMOUNT", nullable = false)
     private int rewardAmount;
 
+    @Transient
+    private AdJoinHistoryCompositeId adJoinHistoryCompositeId;
+
     @Override
-    public AdJoinHistoryId getId() {
-        return this.id;
+    public AdJoinHistoryCompositeId getId() {
+        return new AdJoinHistoryCompositeId(userId.stringValue(), adId.stringValue(), joinAt);
     }
 
-    public AdJoinHistory() {}
+    public UserId getUserId() {
+        return userId;
+    }
 
-    public AdJoinHistory(AdJoinHistoryId id, Ad ad, User user, LocalDateTime joinAt, int rewardAmount) {
-        this.id = id;
-        this.ad = ad;
-        this.user = user;
+    public AdId getAdId() {
+        return adId;
+    }
+
+    public String getAdName() {
+        return adName;
+    }
+
+    public int getRewardAmount() {
+        return rewardAmount;
+    }
+
+    public LocalDateTime getJoinAt() {
+        return joinAt;
+    }
+
+    public AdJoinHistory() {
+    }
+
+    public AdJoinHistory(UserId userId, AdId adId, LocalDateTime joinAt, String adName, int rewardAmount) {
+        this.userId = userId;
+        this.adId = adId;
         this.joinAt = joinAt;
+        this.adName = adName;
         this.rewardAmount = rewardAmount;
     }
 }
+
+

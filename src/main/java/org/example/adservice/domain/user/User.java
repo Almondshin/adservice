@@ -20,7 +20,7 @@ public class User extends AggregateRoot<User, UserId> {
     private UserId id;
 
     @Column(name = "USER_REMAINING_COUNT", nullable = false)
-    private short remainingJoinCount;
+    private int remainingJoinCount;
 
     @Override
     public UserId getId() {
@@ -29,7 +29,7 @@ public class User extends AggregateRoot<User, UserId> {
 
     public User() {}
 
-    public User(UserId id, short remainingJoinCount) {
+    public User(UserId id, int remainingJoinCount) {
         this.id = id;
         this.remainingJoinCount = remainingJoinCount;
     }
