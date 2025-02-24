@@ -18,7 +18,7 @@ spring:
         max-idle: 20
         min-idle: 10
         max-wait: 10000
-    lock-expire-time: 5000
+    lock-expire-time: 3000
 
   jpa:
     hibernate:
@@ -37,6 +37,6 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.SQL: INFO #DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO #TRACE
+    org.hibernate.orm.jdbc.bind: INFO #TRACE
