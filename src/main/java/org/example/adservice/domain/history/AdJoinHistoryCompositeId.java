@@ -2,16 +2,29 @@ package org.example.adservice.domain.history;
 
 import org.example.adservice.domain.ad.AdId;
 import org.example.adservice.domain.user.UserId;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Embeddable
+@TypeDefs({
+        @TypeDef(name="userId", typeClass=UserId.UserIdJavaType.class),
+        @TypeDef(name="adId",   typeClass=AdId.AdIdJavaType.class)
+})
 public class AdJoinHistoryCompositeId implements Serializable {
+    @Type(type = "userId")
+    @Column(name = "USER_ID", nullable = false)
     private UserId userId;
+    @Type(type = "adId")
+    @Column(name = "AD_ID", nullable = false)
     private AdId adId;
+    @Column(name = "JOIN_AT", nullable = false)
     private LocalDateTime joinAt;
 
     public AdJoinHistoryCompositeId(UserId userId, AdId adId, LocalDateTime joinAt) {
