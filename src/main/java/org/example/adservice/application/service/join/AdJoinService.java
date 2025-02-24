@@ -68,9 +68,15 @@ public class AdJoinService {
             if (user == null) {
                 throw new IllegalArgumentException("존재하지 않는 유저입니다: " + request.getUserId());
             }
+            if(!user.canJoin()){
+                throw new IllegalStateException("유저의 광고 참여 가능 횟수가 부족합니다: " + request.getUserId());
+            }
 
             ad.decreaseJoinCount();
             adRepository.add(ad);
+
+            user.decreaseJoinCount();
+            userRepository.add(user);
 
             AdJoinHistory history = new AdJoinHistory(
                     user.getId(),
