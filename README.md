@@ -8,13 +8,16 @@
 ## 목차
 - [기술 스택](#기술-스택)
 - [프로젝트 디렉토리 구조](#프로젝트-디렉토리-구조)
-- [설계 원칙 및 이유](#설계-원칙-및-이유)
+- [설계 원칙 및 핵심 문제 해결 전략](#설계-원칙-및-핵심-문제-해결-전략)
+- [API 명세](#api-명세)
 
 ---
 
 ## 기술 스택
 - Server: Spring Boot, Java 11, Spring Data JPA
-- Database: MariaDB (or H2 for local test)
+- Database: H2 for local test
+- Cache & Lock: Redis (분산 락 적용)
+- Testing: JUnit5, Mockito
 
 ---
 
@@ -60,9 +63,77 @@ src/main/
   - 프레젠테이션 계층 (`presentation(controller)`): API 요청 처리 및 애플리케이션 계층과 상호작용하는 영역
   - 퍼시스턴트 계층 (`persistance`): 데이터베이스와 상호작용하는 영역
 
+###  정책 기반 광고 참여 제한 적용
+- `Policy` 엔티티를 통해 유저의 참여 제한 정책을 설정
+- `Ad.canUserJoin()`에서 정책을 적용하여 참여 가능 여부를 검증
+
 ### 식별자(Identifier) 설계
 - 광고 ID (`AdId`), 유저 ID (`UserId`)를 단순한 `Long` 값이 아닌 Value Object(`StringTypeIdentifier`)로 관리.
 - ID를 값 객체로 만들면 사용되는 도메인 의미가 더 명확해지고, 잘못된 값 할당을 방지할 수 있음
 - 고유한 규칙을 가진 식별자를 사용할 수 있어, 읽기 쉽고 의미전달이 용이
 
+### Redis를 이용한 분산 락으로 동시성 제어
+다수의 서버 인스턴스에서 동작하며, 여러 유저가 동시에 광고에 참여할 수 있는 구조
+따라서, 광고 참여 가능 횟수(remainingJoinCount)가 0 이하로 내려가는 문제를 방지하기 위해 Redis 기반의 분산 락을 활용하여 동시성을 제어
+
+---
+
+### 1️⃣ 광고 등록 API
+- Method: `POST /api/ads`
+- Request:
+  ```json  
+  {  
+    "adName": "광고1",  
+    "rewardAmount": 100,  
+    "remainingJoinCount": 10,  
+    "description": "광고 설명",  
+    "imageUrl": "https://example.com/ad.png",  
+    "startDate": "2025-01-01",  
+    "endDate": "2025-12-31"  
+  }  
+  ``` 
+  Response: `200 OK`  
+
+### 2️⃣ 광고 조회 API
+- Method: `GET /api/ads`
+- Response:
+  ```json  
+  [  
+    {      "adId": "ad123",  
+      "adName": "광고1",  
+      "rewardAmount": 100  
+    }  
+  ]  ```  
+  
+
+### 3️⃣ 광고 참여 API
+- Method: `POST /api/ads/join`
+- Request:
+  ```json  
+  {  
+    "userId": "user123",  
+    "adId": "ad123"  
+  }  
+  ```- Response: `200 OK`  
+
+### 4️⃣ 광고 참여 이력 조회 API
+- Method: `GET /api/ads/history`
+- Query Parameters:
+  - `userId` (필수)
+  - `startDate`, `endDate` (필수)
+  - `page` (선택, 기본값: `0`)
+- Response:
+  ```json  
+  {  
+    "content": [  
+      {  
+        "userId": "user123",  
+        "adId": "ad123",  
+        "joinAt": "2025-02-20T10:00:00"  
+      }  
+    ],  
+    "totalElements": 1,  
+    "totalPages": 1  
+  }  
+  ```
 ---
