@@ -117,23 +117,30 @@ src/main/
   ```- Response: `200 OK`  
 
 ### 4️⃣ 광고 참여 이력 조회 API
-- Method: `GET /api/ads/history`
-- Query Parameters:
-  - `userId` (필수)
-  - `startDate`, `endDate` (필수)
-  - `page` (선택, 기본값: `0`)
+- Method: `POST /api/ads/history`
+- Request:
+  ```json
+  {
+    "userId": "user123",
+    "startDate": "2025-02-01T00:00:00",
+    "endDate": "2025-02-28T23:59:59",
+    "page": 0
+  }
+  ```
 - Response:
-  ```json  
-  {  
-    "content": [  
-      {  
-        "userId": "user123",  
-        "adId": "ad123",  
-        "joinAt": "2025-02-20T10:00:00"  
-      }  
-    ],  
-    "totalElements": 1,  
-    "totalPages": 1  
-  }  
+  ```json
+  {
+    "content": [
+      {
+        "userId": "user123",
+        "adId": "ad123",
+        "joinAt": "2025-02-20T10:00:00",
+        "adName": "광고1",
+        "rewardAmount": 100
+      }
+    ],
+    "totalElements": 1,
+    "totalPages": 1
+  }
   ```
 ---
