@@ -8,7 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 interface AdJoinHistoryJpaRepository extends JpaRepository<AdJoinHistory, AdJoinHistoryCompositeId> {
     Page<AdJoinHistory> findByIdUserIdAndIdJoinAtBetween(UserId userId, LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+    List<AdJoinHistory> findByIdUserId(UserId userId);
 }

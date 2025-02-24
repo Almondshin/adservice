@@ -1,12 +1,15 @@
 package org.example.adservice.domain.ad;
 
 import lombok.ToString;
+import org.example.adservice.domain.history.AdJoinHistory;
+import org.example.adservice.domain.user.UserId;
 import org.example.common.domain.AggregateRoot;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +45,16 @@ public class Ad extends AggregateRoot<Ad, AdId> {
 
     @Column(name = "END_DATE", nullable = false)
     private LocalDateTime endDate;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "AD_ID")
+    private List<Policy> policies = new ArrayList<>();
+
+    public boolean canUserJoin(UserId userId, List<AdJoinHistory> historyList) {
+        return policies.stream()
+                .allMatch(policy -> policy.isSatisfiedBy(userId, historyList));
+    }
+
 
     @Override
     public AdId getId() {

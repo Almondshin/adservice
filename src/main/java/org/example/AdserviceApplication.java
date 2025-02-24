@@ -1,7 +1,9 @@
 package org.example;
 
 import org.example.adservice.application.service.ad.AdService;
+import org.example.adservice.application.service.history.AdJoinHistoryService;
 import org.example.adservice.controller.ad.container.AdRequest;
+import org.example.adservice.controller.history.container.AdJoinHistoryRequest;
 import org.example.adservice.domain.ad.AdRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +28,12 @@ public class AdserviceApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(AdService adService) {
+    CommandLineRunner commandLineRunner(AdService adService, AdJoinHistoryService adJoinHistoryService) {
         return args -> {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime end = LocalDateTime.now().plusDays(20);
             adService.addAd(AdRequest.builder()
-                            .adName("광고1")
+                            .adName("광고111")
                             .description("설명1")
                             .rewardAmount(1000)
                             .remainingJoinCount(100)
@@ -40,6 +42,13 @@ public class AdserviceApplication {
                             .endDate(end)
                     .build());
             adService.findAds();
+
+            adJoinHistoryService.findJoinHistoryByUserId(AdJoinHistoryRequest.builder()
+                            .userId("user1")
+                            .startDate(now)
+                            .endDate(end)
+                            .page(null)
+                    .build());
         };
     }
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AdJoinService {
@@ -68,6 +69,12 @@ public class AdJoinService {
             if (user == null) {
                 throw new IllegalArgumentException("존재하지 않는 유저입니다: " + request.getUserId());
             }
+            List<AdJoinHistory> historyList = adJoinHistoryRepository.findByUserId(user.getId());
+
+            if (!ad.canUserJoin(user.getId(), historyList)) {
+                throw new IllegalStateException("유저가 해당 광고에 참여할 수 없습니다.");
+            }
+
             if(!user.canJoin()){
                 throw new IllegalStateException("유저의 광고 참여 가능 횟수가 부족합니다: " + request.getUserId());
             }

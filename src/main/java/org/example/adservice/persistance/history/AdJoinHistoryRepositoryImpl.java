@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class AdJoinHistoryRepositoryImpl extends BaseRepository<AdJoinHistory, AdJoinHistoryCompositeId, AdJoinHistoryJpaRepository> implements AdJoinHistoryRepository {
@@ -21,4 +22,11 @@ public class AdJoinHistoryRepositoryImpl extends BaseRepository<AdJoinHistory, A
     public Page<AdJoinHistory> findByUserIdAndJoinAt(UserId userId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         return repository.findByIdUserIdAndIdJoinAtBetween(userId, startDate, endDate, pageable);
     }
+
+    @Override
+    public List<AdJoinHistory> findByUserId(UserId userId) {
+        return repository.findByIdUserId(userId);
+    }
+
+
 }
