@@ -92,7 +92,7 @@ src/main/
     "endDate": "2025-12-31"  
   }  
   ``` 
-  Response: `200 OK`  
+  - Response: `200 OK`  
 
 ### 2️⃣ 광고 조회 API
 - Method: `GET /api/ads`
@@ -103,7 +103,8 @@ src/main/
       "adName": "광고1",  
       "rewardAmount": 100  
     }  
-  ]  ```  
+  ]
+  ```  
   
 
 ### 3️⃣ 광고 참여 API
@@ -114,7 +115,8 @@ src/main/
     "userId": "user123",  
     "adId": "ad123"  
   }  
-  ```- Response: `200 OK`  
+  ```
+- Response: `200 OK`  
 
 ### 4️⃣ 광고 참여 이력 조회 API
 - Method: `POST /api/ads/history`
